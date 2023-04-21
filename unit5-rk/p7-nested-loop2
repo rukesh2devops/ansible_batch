@@ -1,0 +1,36 @@
+- name: Example of list of hash loop
+  hosts: control-node
+  gather_facts: no
+  become: true
+  vars:
+    myusers:
+      - harsh01
+      - harsh02
+      - harsh03
+      - harsh04
+    mygroups:
+      - indiatv
+      - ndtv
+      - zeenews
+
+
+  tasks:
+
+  - name: First add mutiple group from simple loop
+    group: 
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - "{{ mygroups }}"
+
+  - name: Add users with nested loop example
+    user:
+      name: "{{ item[0] }}"
+      state: present
+      group: "{{ item[1] }}"
+      append: yes
+    with_nested:
+       - "{{ myusers }}"
+       - "{{ mygroups }}"
+      
+

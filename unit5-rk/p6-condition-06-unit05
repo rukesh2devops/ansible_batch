@@ -1,0 +1,13 @@
+- name: Unit05 condition example - when
+  hosts: all
+  gather_facts: true
+  tasks:
+  - name: copy a file when os is "Redhat"
+    copy: 
+      src: /etc/passwd
+      dest: /tmp/passwd-when-condition-13
+    when: ansible_memtotal_mb > 2000     ## here do not use ' ' for number integer ## 
+      
+
+
+

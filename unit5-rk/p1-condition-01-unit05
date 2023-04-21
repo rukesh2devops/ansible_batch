@@ -1,0 +1,21 @@
+- name: Unit05 condition example - when
+  hosts: all
+  gather_facts: true
+  tasks:
+  - name: copy a file when os is "Redhat"
+    copy: 
+      src: /etc/passwd
+      dest: /tmp/passwd-when-condition 
+    when: ansible_distribution == 'CentOS'
+
+  - name: install vsftpd
+    dnf:
+      name: vsftpd
+      state: present
+    when: ansible_distribution == 'RedHat'
+
+  - name: create a user
+    user:
+      name: lalan
+      state: present
+    when: ansible_distribution == 'CentOS'

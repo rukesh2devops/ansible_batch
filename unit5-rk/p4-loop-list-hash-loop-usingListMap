@@ -1,0 +1,33 @@
+- name: list of hash loop example
+  hosts: control-node
+  gather_facts: false
+  become: true
+  vars:
+   myusers:
+     - name: shaym01
+       id: 1100
+       pw: hello
+       grp: fourman
+     - name: shayam02 
+       id: 1102
+       pw: hi
+       grp: superwisers
+  tasks: 
+  - name: first create groups using simple loop
+    group:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - superwisers
+      - fourman
+      - sr-managers
+
+
+  - name: Create users using list of hash loops
+    user: 
+      name: "{{ item.name }}"
+      group: "{{ item.grp }}"
+      uid: "{{ item.id }}"
+      password: "{{ item.pw | password_hash('sha512')}}"
+    with_items:
+      - "{{ myusers }}"

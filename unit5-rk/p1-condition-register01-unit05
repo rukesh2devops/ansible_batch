@@ -1,0 +1,22 @@
+- name: Unit05 condition example - when
+  hosts: all
+  gather_facts: true
+  tasks:
+  - name: copy a file when os is "Redhat"
+    stat: 
+      path: /tmp/abc.conf
+    register: xyz
+ 
+#  - name: Debuging
+#    debug:
+#      var: xyz.stat.exists
+
+  - name: create file when the /etc/abc.conf does not exist.
+    copy:
+      content: "Thanks for creating this file" 
+      dest: /tmp/abc.conf
+    when: xyz.stat.exists == false
+      
+
+
+

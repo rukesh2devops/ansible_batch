@@ -1,0 +1,27 @@
+- name: Example of list of hash loop
+  hosts: control-node
+  gather_facts: no
+  become: true
+  tasks:
+
+  - name: First add mutiple group from simple loop
+    group: 
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - staffs
+      - managers
+      - workers
+
+  - name: Add users with list of hash group
+    user:
+      name: "{{ item.x }}"
+      state: present
+      group: "{{ item.y }}"
+      password: "{{ item.z | password_hash('sha512')}}"
+    with_items:
+      - { x: 'ram', y: 'staffs', z: 'redhat' } 
+      - { x: 'raju', y: 'managers', z: 'hello'}
+      - { x: 'barat', y: 'workers', z: 'jioindia'}
+      
+

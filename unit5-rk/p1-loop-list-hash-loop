@@ -1,0 +1,11 @@
+- name: Example of list hash loop
+  hosts: all
+  tasks:
+  - name: Copy files
+    copy:
+      src: "{{ item.x }}"
+      dest: "{{ item.y }}"
+    with_items:
+      - { x: /etc/fstab, y: /tmp }
+      - { x: /etc/passwd, y: '/var/tmp' }
+      - { x: /etc/group, y: '/root' }

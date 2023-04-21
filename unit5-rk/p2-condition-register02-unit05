@@ -1,0 +1,20 @@
+- name: Unit05 condition example - when with register variable
+  hosts: all
+  gather_facts: true
+  tasks:
+  - name: check hardware of system
+    command: uname -m 
+    register: x
+
+  - debug:
+     var: x
+  
+  - name: Create user when hardware is  "x86_64"
+    user:
+      name: meena01
+      state: present
+    when: x.stdout == 'x86_64'
+
+
+
+

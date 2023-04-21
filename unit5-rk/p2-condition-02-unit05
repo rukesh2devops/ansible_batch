@@ -1,0 +1,9 @@
+- name: Unit05 condition example - when
+  hosts: all
+  gather_facts: true
+  tasks:
+  - name: copy a file when os is "Redhat"
+    copy: 
+      src: /etc/passwd
+      dest: /tmp/passwd-when-condition 
+    when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '9'
