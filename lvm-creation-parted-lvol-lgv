@@ -1,0 +1,80 @@
+- name: creating a partition and creating lvm
+  hosts: all
+  become: true
+  gather_facts: no 
+  tasks:
+    - name: create partition of disk /dev/sdb of 4GB
+      parted:
+        device: /dev/sdb
+        unit: MiB
+        number: 1
+        state: present
+        part_end: 4GiB
+
+      register: device_info
+    - debug:
+         var: device_info  
+   
+    - name: create second partition of disk /dev/sdb of rest all GB
+      parted:
+        device: /dev/sdb
+        number: "2"
+        state: present 
+        part_type: primary
+        part_end: 100%
+        part_start: "{{device_info.partitions[0].end + 1 }}MiB"
+
+
+    - name: install lvm2 dependency
+      package:
+        name: lvm2
+        state: present
+
+
+    - name: create volume group (vg) and pv will be auto added
+      lvg:
+        vg: vg01-app
+        pvs: /dev/sdb1,/dev/sdb2
+        #pesize: 16
+
+    - name: create logical volume (lv01)
+      lvol:
+        vg: vg01-app
+        lv: lv01
+        size: 1G
+        force: yes
+     
+    - name: create logical volume (lv02)
+      lvol:
+        vg: vg01-app
+        lv: lv02
+        size: 3G
+        force: yes
+
+    - name: format file system lv01
+      filesystem:
+        fstype: xfs
+        dev: /dev/vg01-app/lv01
+  
+    - name: format file system lv02
+      filesystem:
+        fstype: xfs
+        dev: /dev/vg01-app/lv02   
+
+     
+   ## Note:- the data-rk01 and data-rk02 folder will be ceated by mount command 
+    - name: mount the lv on /data-rk01 
+      mount:
+         name: /data-rk01
+         src: /dev/vg01-app/lv01
+         fstype: xfs
+         state: mounted
+ 
+    - name: mount the lv on /data-rk01
+      mount:
+         name: /data-rk02
+         src: /dev/vg01-app/lv02
+         fstype: xfs
+         state: mounted
+  
+       
