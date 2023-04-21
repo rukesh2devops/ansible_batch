@@ -1,0 +1,37 @@
+- name: notify and handlers example
+  become: true
+  gather_facts: false
+  hosts: control-node
+  tasks:
+    - name: VSFTPD application updated
+      copy:
+        content: " Appllication installed hi3"
+        dest: /tmp/motd
+      notify: "application_upgraded"
+
+    - name: copy file
+      copy:
+        src: /etc/fstab
+        dest: /tmp/fstab-temp4
+
+      notify: "email"
+   
+
+    - name: create directory
+      file:
+       path: /tmp/pk
+       state: directory 
+
+
+    
+  handlers:
+    - name: restart servive chronyd
+      service:
+        name: chronyd
+        state: restarted 
+      listen: "application_upgraded" 
+
+    - name: send mail to server file copied
+      command: echo " file received"
+      listen: "email"
+

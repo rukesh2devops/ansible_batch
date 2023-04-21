@@ -1,0 +1,24 @@
+- name: notify and handlers example
+  become: true
+  gather_facts: false
+  hosts: control-node
+  tasks:
+    - name: copy database file   
+      copy: 
+        src: dbfile.sh #local path
+        mode: 755
+        dest: /tmp
+
+    - name: run the script
+      shell: /tmp/dbfile.sh
+      register: xyz
+      notify: restart_service
+      changed_when: '"database upgraded successfully" in xyz.stdout'
+
+
+  handlers:
+    - name: restart service
+      service:
+        name: chronyd
+        state: restarted
+      listen: restart_service

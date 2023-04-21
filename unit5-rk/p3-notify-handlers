@@ -1,0 +1,43 @@
+- name: notify and handlers example
+  become: true
+  gather_facts: false
+  hosts: control-node
+  tasks:
+    - name: VSFTPD application updated
+      copy:
+        content: " Appllication installed hi53"
+        dest: /tmp/motd
+      notify: "application_upgraded"
+
+    - name: copy file
+      copy:
+        src: /etc/fstab
+        dest: /tmp/fstab-temp56
+      notify: 
+         - email  ### for one task there could be multiple notifyer ##
+         - welcome_msg
+   
+
+    - name: create directory
+      file:
+       path: /tmp/pk1
+       state: directory 
+
+
+    
+  handlers:
+    - name: restart servive chronyd
+      service:
+        name: chronyd
+        state: restarted 
+      listen: "application_upgraded" 
+
+    - name: send mail to server file copied
+      debug:
+        msg: " file received"
+      listen: "email"
+
+    - name: welcome_msg     ### we can directory write notifyer here in name then no need to write listen ###
+      command: echo " welocme message received and file received"
+      
+
