@@ -1,0 +1,28 @@
+- name : example of block and rescue
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks: 
+   - block:
+      - name: create a folder
+        file: 
+          path: /tmp/abc
+          state: directory
+
+      - name: run this script
+        shell: /tmp/run.sh    ### here there is no file hence thi block considered as failed then rescue will come in picture
+
+
+
+      - name: download a file
+        get_url:
+          url: https://www.cncf.io/certification/cka/
+          dest: /tmp
+
+      
+
+     rescue: 
+      - name: restart this service
+        service: 
+           name: chronyd
+           state: restarted

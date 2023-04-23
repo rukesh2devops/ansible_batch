@@ -1,0 +1,22 @@
+- name : example of block only
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks: 
+   - block:
+      - name: create a folder
+        file: 
+          path: /tmp/abc2
+          state: directory
+
+      - name: run this script
+        shell: touch /tmp/s2 
+
+      - name: download a file
+        get_url:
+          url: https://www.cncf.io/certification/cka/
+          dest: /tmp
+    
+     when: ansible_distribution == "RedHat"
+
+

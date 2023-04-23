@@ -1,0 +1,21 @@
+- name: Example of error handlying - ignore_errors
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+   - name: check status of a service which is already made it in stopped mode knowly
+     command: systemctl is-active chronyd
+     register: xyz
+     ignore_errors: yes
+
+## playbook was not going ahead since service was down and ansible was getting understand that it is error and got failed hence we have used "ignore_errors" to ignore this and run the playbook ahead.
+   
+  
+   - debug:
+       var: xyz
+   
+   - name: start the service if found in stop mode
+     service:
+       name: chronyd
+       state: started
+     when: xyz.rc != 0    

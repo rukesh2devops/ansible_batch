@@ -1,0 +1,11 @@
+- name: Error handling with failed_when example
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: install vsftpds
+      package:
+        name: vsftpd
+        state: installed
+      failed_when: ansible_distribution == "RedHat"
+    

@@ -1,0 +1,40 @@
+- name: tagging example  " playbook file name is 'p1-tagging' "
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: DB Installation
+      copy: 
+        src: /etc/fstab
+        dest: /tmp/fstab_db_installation
+
+      tags: dbinstall
+
+
+    - name: DB backup
+      copy:
+        src: /etc/passwd
+        dest: /tmp/passwd_db_backup
+
+      tags: dbbackup
+
+  
+    - name: DB Restore
+      copy:
+        src: /etc/group 
+        dest: /tmp/group_restore
+
+      tags: dbrestore
+
+
+#ansible-playbook p1-tagging --tags=dbinstall
+# It will run only one task dbinstall
+
+#ansible-playbook p1-tagging --skip-tags=dbrestore,dbinstall
+# It will skill two tasks dbrestore and dbinstall but dbbackup will run
+
+#ansible-playbook p1-tagging --skip-tags=dbbackup
+# It will skip one task dbbackup rest two will run
+
+#ansible-playbook p1-tagging
+# It will run all tasks.
