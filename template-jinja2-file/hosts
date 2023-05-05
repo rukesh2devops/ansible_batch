@@ -1,0 +1,9 @@
+[web]
+10.128.0.5 
+#system1
+10.128.0.2
+
+
+
+[all:vars]
+password_ssh_pass=passwordindia@123

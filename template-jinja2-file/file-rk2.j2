@@ -1,0 +1,9 @@
+HOSTNAME= {{ ansible_hostname }}
+IPADDRESS= {{ ansible_default_ipv4.address }}
+TOTAL MEMORY= {{ ansible_memtotal_mb }}
+{% if xyz.stat.exists == true %}
+DISK_SDA={{ ansible_devices.sda.size }}
+{%else %}
+DISK_SDA=NONE
+{% endif %}
+

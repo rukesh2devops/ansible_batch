@@ -1,0 +1,15 @@
+- name: copy file from control node
+  hosts: all
+  become: true
+  tasks:
+   - name: check state
+     stat:
+        path: /dev/sda
+     register: xyz
+
+   - debug:
+        var: xyz
+
+   - template:
+       src: file-rk2.j2
+       dest: /tmp/memfile

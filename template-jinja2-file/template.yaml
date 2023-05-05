@@ -1,0 +1,8 @@
+- name: copy file from control node
+  hosts: all
+  become: true
+  tasks:
+   - name: copy module
+     template:
+        src: file-rk.j2
+        dest: /tmp/file-rk01

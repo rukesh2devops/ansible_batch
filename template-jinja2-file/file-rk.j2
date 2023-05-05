@@ -1,0 +1,8 @@
+{% if ansible_distribution == 'RedHat' %}
+Welcome on testlab servers.
+ServerName {{ ansible_hostname }}
+{% elif ansible_distribution == 'CentOS' %}
+We are learning Asible Training and it is CentOS machine.
+{% endif %}
+
+it will come in all VirtualHostName {{ ansible_default_ipv4.address }}:80
