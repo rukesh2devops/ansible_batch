@@ -1,0 +1,10 @@
+---
+# tasks file for haproxyi
+#
+#
+
+- name: simple file copy
+  copy:
+    src: /etc/group
+    dest: /tmp/group_haproxy_copy
+

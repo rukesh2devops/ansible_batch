@@ -1,0 +1,5 @@
+- name: Notifyer say to restart chronyd service
+  service:
+    name: chronyd
+    state: restarted
+  listen: restart_chronyd 

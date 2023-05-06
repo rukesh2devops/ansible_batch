@@ -1,0 +1,9 @@
+- name: copy developer files
+  copy:
+    src: index.html
+    dest: "{{ tmproot }}"
+
+- name: copy jinja2 file
+  template:
+    src: rk-jinja-file.j2
+    dest: "{{ tmproot }}"

@@ -1,0 +1,22 @@
+- name: VSFTPD installation
+  package:
+    name: "{{ web }}"
+    state: present
+
+- name: Start the service
+  service:
+    name: "{{ web }}"
+    state: started
+    enabled: true 
+  notify: restart_chronyd
+
+
+- name: import new tasks
+  import_tasks: ftp.yaml  
+    
+- name: simple file copy
+  copy:
+    src: "{{ webroot }}"
+    dest: /tmp/
+
+
